@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CS CBT Platform - CSC 281 & CSC 238</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
         
         * {
             margin: 0;
@@ -265,6 +265,46 @@
             color: var(--light);
         }
         
+        /* Code Block Styling */
+        .code-block {
+            background: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            overflow-x: auto;
+            position: relative;
+        }
+        
+        .code-block::before {
+            content: 'VB.NET';
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: var(--primary);
+            color: white;
+            padding: 4px 12px;
+            font-size: 0.75rem;
+            border-bottom-left-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+        }
+        
+        .code-line {
+            display: block;
+            color: #e6edf3;
+            padding: 2px 0;
+        }
+        
+        .code-keyword { color: #ff7b72; }
+        .code-string { color: #a5d6ff; }
+        .code-comment { color: #8b949e; font-style: italic; }
+        .code-function { color: #d2a8ff; }
+        .code-number { color: #79c0ff; }
+        
         .options {
             display: flex;
             flex-direction: column;
@@ -327,6 +367,48 @@
         .option-text {
             font-size: 1rem;
             color: var(--light);
+        }
+        
+        /* Subjective Input Styling */
+        .subjective-container {
+            margin-top: 20px;
+        }
+        
+        .subjective-label {
+            display: block;
+            margin-bottom: 10px;
+            color: var(--gray);
+            font-size: 0.95rem;
+        }
+        
+        .subjective-input {
+            width: 100%;
+            background: rgba(13, 17, 23, 0.8);
+            border: 2px solid rgba(99, 102, 241, 0.3);
+            border-radius: 12px;
+            padding: 15px 20px;
+            color: var(--light);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+        
+        .subjective-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+        
+        .subjective-input::placeholder {
+            color: var(--gray);
+            opacity: 0.6;
+        }
+        
+        .subjective-hint {
+            margin-top: 10px;
+            font-size: 0.85rem;
+            color: var(--gray);
+            font-style: italic;
         }
         
         /* Buttons */
@@ -501,6 +583,43 @@
             color: var(--danger);
         }
         
+        .review-answer-comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 15px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+        }
+        
+        .answer-box {
+            background: rgba(13, 17, 23, 0.6);
+            border-radius: 8px;
+            padding: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .answer-label {
+            font-size: 0.75rem;
+            color: var(--gray);
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .answer-value {
+            color: var(--light);
+            word-break: break-word;
+        }
+        
+        .answer-value.correct-ans {
+            color: var(--success);
+        }
+        
+        .answer-value.wrong-ans {
+            color: var(--danger);
+        }
+        
         /* Hidden states */
         .hidden {
             display: none !important;
@@ -513,6 +632,8 @@
             .quiz-header { flex-direction: column; align-items: flex-start; }
             .navigation { flex-direction: column-reverse; }
             .btn { width: 100%; justify-content: center; }
+            .review-answer-comparison { grid-template-columns: 1fr; }
+            .code-block { font-size: 0.85rem; padding: 15px; }
         }
         
         /* Loading animation */
@@ -544,6 +665,19 @@
             0% { transform: translateY(-100px) rotate(0deg); opacity: 1; }
             100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
         }
+        
+        /* Subjective badge */
+        .subjective-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--warning) 0%, #d97706 100%);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-left: 10px;
+            vertical-align: middle;
+        }
     </style>
 </head>
 <body>
@@ -554,7 +688,7 @@
         <header>
             <div class="logo">
                 <span>💻</span>
-                <span>CS CBT BY CONFIDENCE</span>
+                <span>CS CBT Platform</span>
             </div>
             <p class="subtitle">Computer-Based Testing for Computer Science Students</p>
         </header>
@@ -579,7 +713,7 @@
                     <div class="course-title">VB.NET Programming</div>
                     <div class="course-meta">
                         <span>⏱️ 60 mins</span>
-                        <span>📝 50 Questions</span>
+                        <span>📝 50 Questions (45 MCQ + 5 Coding)</span>
                     </div>
                 </div>
             </div>
@@ -603,8 +737,22 @@
                 <div class="question-number" id="questionNumber">Question 1 of 50</div>
                 <div class="question-text" id="questionText">Loading question...</div>
                 
-                <div class="options" id="optionsContainer">
-                    <!-- Options will be dynamically inserted -->
+                <!-- Code block for subjective questions -->
+                <div id="codeBlock" class="code-block hidden"></div>
+                
+                <!-- Multiple choice options -->
+                <div class="options" id="optionsContainer"></div>
+                
+                <!-- Subjective input -->
+                <div id="subjectiveContainer" class="subjective-container hidden">
+                    <label class="subjective-label">Enter your answer:</label>
+                    <input type="text" 
+                           id="subjectiveInput" 
+                           class="subjective-input" 
+                           placeholder="Type your answer here..."
+                           autocomplete="off"
+                           spellcheck="false">
+                    <div class="subjective-hint">Press Enter or click Next to continue</div>
                 </div>
             </div>
             
@@ -619,7 +767,7 @@
         <div id="scoreboardScreen" class="card hidden">
             <div class="scoreboard">
                 <h2>Assessment Complete! 🎉</h2>
-                <p style="color: var(--gray); margin-top: 10px;" id="scoreCourse">CSC 281</p>
+                <p style="color: var(--gray); margin-top: 10px;" id="scoreCourse">CSC 238</p>
                 
                 <div class="score-circle">
                     <svg width="200" height="200">
@@ -770,16 +918,43 @@
                 { q: "What is the purpose of 'BindingSource' component?", options: ["Bind controls to data source", "Bind network connections", "Bind files", "Bind keys"], a: 0 },
                 { q: "Which exception is thrown for null references?", options: ["ArgumentException", "NullReferenceException", "IndexOutOfRangeException", "InvalidOperationException"], a: 1 },
                 { q: "What does 'Option Strict On' enforce?", options: ["Strict typing", "Strict naming", "Strict formatting", "Strict commenting"], a: 0 },
-                { q: "Which method closes a Windows Form?", options: ["Exit()", "Close()", "End()", "Terminate()"], a: 1 },
-                { q: "What is the purpose of 'My' namespace?", options: ["Personal namespace", "Quick access to common functions", "Memory management", "MySQL connection"], a: 1 },
-                { q: "Which property gets/sets the selected item in ListBox?", options: ["SelectedItem", "Item", "Value", "Text"], a: 0 },
-                { q: "What is an interface in VB.NET?", options: ["User interface", "Contract for class implementation", "Database interface", "Network interface"], a: 1 },
-                { q: "Which keyword implements an interface?", options: ["inherit", "implements", "interface", "uses"], a: 1 },
-                { q: "What is the purpose of 'Overloads' keyword?", options: ["Override method", "Create multiple methods with same name", "Load files", "Memory overload"], a: 1 },
-                { q: "Which control allows user to select multiple items?", options: ["RadioButton", "CheckBox", "TextBox", "Label"], a: 1 },
-                { q: "What is the purpose of 'Timer' control?", options: ["Tell time", "Execute code at intervals", "Countdown only", "Stopwatch"], a: 1 },
-                { q: "Which property of Timer controls the interval?", options: ["Duration", "Interval", "Time", "Delay"], a: 1 },
-                { q: "What is the scope of a variable declared inside a method?", options: ["Global", "Class level", "Method/Local level", "Namespace level"], a: 2 }
+                
+                // SUBJECTIVE CODING QUESTIONS (Questions 46-50)
+                { 
+                    q: "What is the output of the following code?", 
+                    code: `<span class="code-keyword">Dim</span> x <span class="code-keyword">As Integer</span> = <span class="code-number">5</span>\n<span class="code-keyword">Dim</span> y <span class="code-keyword">As Integer</span> = <span class="code-number">3</span>\n<span class="code-keyword">Dim</span> result <span class="code-keyword">As Integer</span> = x * y + x - y\nConsole.<span class="code-function">WriteLine</span>(result)`,
+                    subjective: true,
+                    answer: "17",
+                    acceptableAnswers: ["17", "result: 17", "output: 17", "17 "]
+                },
+                { 
+                    q: "What will be printed to the console?", 
+                    code: `<span class="code-keyword">Dim</span> name <span class="code-keyword">As String</span> = <span class="code-string">"VB.NET"</span>\n<span class="code-keyword">Dim</span> length <span class="code-keyword">As Integer</span> = name.Length\nConsole.<span class="code-function">WriteLine</span>(length)`,
+                    subjective: true,
+                    answer: "6",
+                    acceptableAnswers: ["6", "result: 6", "output: 6", "6 "]
+                },
+                { 
+                    q: "What is the final value of 'counter' after this loop executes?", 
+                    code: `<span class="code-keyword">Dim</span> counter <span class="code-keyword">As Integer</span> = <span class="code-number">0</span>\n<span class="code-keyword">For</span> i <span class="code-keyword">As Integer</span> = <span class="code-number">1</span> <span class="code-keyword">To</span> <span class="code-number">5</span>\n    counter += i\n<span class="code-keyword">Next</span>\n<span class="code-comment">' counter value is?</span>`,
+                    subjective: true,
+                    answer: "15",
+                    acceptableAnswers: ["15", "counter = 15", "result: 15", "15 "]
+                },
+                { 
+                    q: "What will be the output when this code runs?", 
+                    code: `<span class="code-keyword">Dim</span> numbers() <span class="code-keyword">As Integer</span> = {<span class="code-number">10</span>, <span class="code-number">20</span>, <span class="code-number">30</span>, <span class="code-number">40</span>}\n<span class="code-keyword">Dim</span> sum <span class="code-keyword">As Integer</span> = <span class="code-number">0</span>\n<span class="code-keyword">For Each</span> num <span class="code-keyword">As Integer</span> <span class="code-keyword">In</span> numbers\n    sum += num\n<span class="code-keyword">Next</span>\nConsole.<span class="code-function">WriteLine</span>(sum / numbers.Length)`,
+                    subjective: true,
+                    answer: "25",
+                    acceptableAnswers: ["25", "result: 25", "output: 25", "25.0", "25 "]
+                },
+                { 
+                    q: "Complete the code: What should replace '???' to make the output 'HELLO'?", 
+                    code: `<span class="code-keyword">Dim</span> msg <span class="code-keyword">As String</span> = <span class="code-string">"hello"</span>\nConsole.<span class="code-function">WriteLine</span>(msg.???)`,
+                    subjective: true,
+                    answer: "ToUpper()",
+                    acceptableAnswers: ["ToUpper()", "ToUpper", "ToUpper()", "toupper()", "ToUpper()", "msg.ToUpper()", ".ToUpper()"]
+                }
             ]
         };
 
@@ -795,8 +970,15 @@
         function startQuiz(course) {
             currentCourse = course;
             currentQuestions = [...questionBanks[course]]; // Copy questions
-            // Shuffle questions for variety
-            currentQuestions.sort(() => Math.random() - 0.5);
+            // Shuffle questions for variety (but keep subjective at end for CSC238)
+            if (course === 'csc238') {
+                // Keep last 5 subjective questions fixed at the end, shuffle the first 45
+                const subjective = currentQuestions.slice(-5);
+                const objective = currentQuestions.slice(0, -5).sort(() => Math.random() - 0.5);
+                currentQuestions = [...objective, ...subjective];
+            } else {
+                currentQuestions.sort(() => Math.random() - 0.5);
+            }
             
             currentQuestionIndex = 0;
             userAnswers = new Array(currentQuestions.length).fill(-1);
@@ -839,9 +1021,15 @@
 
         function displayQuestion() {
             const q = currentQuestions[currentQuestionIndex];
+            const isSubjective = q.subjective === true;
             
-            document.getElementById('questionNumber').textContent = 
-                `Question ${currentQuestionIndex + 1} of ${currentQuestions.length}`;
+            // Update question number with badge for subjective
+            let questionNumText = `Question ${currentQuestionIndex + 1} of ${currentQuestions.length}`;
+            if (isSubjective) {
+                questionNumText += ' <span class="subjective-badge">CODING</span>';
+            }
+            document.getElementById('questionNumber').innerHTML = questionNumText;
+            
             document.getElementById('questionCounter').textContent = 
                 `Question ${currentQuestionIndex + 1}/${currentQuestions.length}`;
             document.getElementById('questionText').textContent = q.q;
@@ -850,16 +1038,44 @@
             const progress = ((currentQuestionIndex + 1) / currentQuestions.length) * 100;
             document.getElementById('progressBar').style.width = `${progress}%`;
             
-            // Display options
-            const optionsHtml = q.options.map((opt, idx) => `
-                <div class="option ${userAnswers[currentQuestionIndex] === idx ? 'selected' : ''}" 
-                     onclick="selectOption(${idx})">
-                    <div class="option-indicator">${String.fromCharCode(65 + idx)}</div>
-                    <div class="option-text">${opt}</div>
-                </div>
-            `).join('');
+            // Handle code block
+            const codeBlock = document.getElementById('codeBlock');
+            if (q.code) {
+                codeBlock.innerHTML = q.code;
+                codeBlock.classList.remove('hidden');
+            } else {
+                codeBlock.classList.add('hidden');
+            }
             
-            document.getElementById('optionsContainer').innerHTML = optionsHtml;
+            // Handle subjective vs multiple choice
+            const optionsContainer = document.getElementById('optionsContainer');
+            const subjectiveContainer = document.getElementById('subjectiveContainer');
+            const subjectiveInput = document.getElementById('subjectiveInput');
+            
+            if (isSubjective) {
+                optionsContainer.innerHTML = '';
+                optionsContainer.classList.add('hidden');
+                subjectiveContainer.classList.remove('hidden');
+                
+                // Restore previous answer if exists
+                const savedAnswer = userAnswers[currentQuestionIndex];
+                subjectiveInput.value = (savedAnswer !== -1 && savedAnswer !== null) ? savedAnswer : '';
+                subjectiveInput.focus();
+            } else {
+                subjectiveContainer.classList.add('hidden');
+                optionsContainer.classList.remove('hidden');
+                
+                // Display multiple choice options
+                const optionsHtml = q.options.map((opt, idx) => `
+                    <div class="option ${userAnswers[currentQuestionIndex] === idx ? 'selected' : ''}" 
+                         onclick="selectOption(${idx})">
+                        <div class="option-indicator">${String.fromCharCode(65 + idx)}</div>
+                        <div class="option-text">${opt}</div>
+                    </div>
+                `).join('');
+                
+                optionsContainer.innerHTML = optionsHtml;
+            }
             
             // Update navigation buttons
             document.getElementById('prevBtn').disabled = currentQuestionIndex === 0;
@@ -879,7 +1095,18 @@
             displayQuestion();
         }
 
+        function saveSubjectiveAnswer() {
+            const input = document.getElementById('subjectiveInput');
+            const value = input.value.trim();
+            userAnswers[currentQuestionIndex] = value !== '' ? value : -1;
+        }
+
         function nextQuestion() {
+            // Save subjective answer if current question is subjective
+            if (currentQuestions[currentQuestionIndex].subjective) {
+                saveSubjectiveAnswer();
+            }
+            
             if (currentQuestionIndex < currentQuestions.length - 1) {
                 currentQuestionIndex++;
                 displayQuestion();
@@ -887,21 +1114,57 @@
         }
 
         function previousQuestion() {
+            // Save subjective answer if current question is subjective
+            if (currentQuestions[currentQuestionIndex].subjective) {
+                saveSubjectiveAnswer();
+            }
+            
             if (currentQuestionIndex > 0) {
                 currentQuestionIndex--;
                 displayQuestion();
             }
         }
 
+        function checkSubjectiveAnswer(userAns, correctAns, acceptableAnswers) {
+            if (!userAns || userAns === -1) return false;
+            const normalized = userAns.toString().trim().toLowerCase();
+            const correct = correctAns.toString().trim().toLowerCase();
+            
+            if (normalized === correct) return true;
+            
+            // Check acceptable variations
+            if (acceptableAnswers) {
+                return acceptableAnswers.some(ans => 
+                    normalized === ans.toString().trim().toLowerCase()
+                );
+            }
+            
+            return false;
+        }
+
         function submitQuiz() {
             clearInterval(timerInterval);
+            
+            // Save current subjective answer if on last question
+            if (currentQuestions[currentQuestionIndex].subjective) {
+                saveSubjectiveAnswer();
+            }
             
             // Calculate score
             let correct = 0;
             let wrong = 0;
             
             userAnswers.forEach((answer, idx) => {
-                if (answer === currentQuestions[idx].a) {
+                const q = currentQuestions[idx];
+                let isCorrect = false;
+                
+                if (q.subjective) {
+                    isCorrect = checkSubjectiveAnswer(answer, q.answer, q.acceptableAnswers);
+                } else {
+                    isCorrect = answer === q.a;
+                }
+                
+                if (isCorrect) {
                     correct++;
                 } else {
                     wrong++;
@@ -947,17 +1210,41 @@
             // Generate review
             const reviewHtml = currentQuestions.map((q, idx) => {
                 const userAnswer = userAnswers[idx];
-                const isCorrect = userAnswer === q.a;
+                let isCorrect = false;
+                let userAnswerText = '';
+                let correctAnswerText = '';
+                
+                if (q.subjective) {
+                    isCorrect = checkSubjectiveAnswer(userAnswer, q.answer, q.acceptableAnswers);
+                    userAnswerText = (userAnswer !== -1 && userAnswer !== null) ? userAnswer : 'Not answered';
+                    correctAnswerText = q.answer;
+                } else {
+                    isCorrect = userAnswer === q.a;
+                    userAnswerText = userAnswer !== -1 ? q.options[userAnswer] : 'Not answered';
+                    correctAnswerText = q.options[q.a];
+                }
+                
                 const statusClass = isCorrect ? 'correct' : 'wrong';
                 const statusText = isCorrect ? 'Correct' : 'Wrong';
+                
+                const codeBlockHtml = q.code ? `<div class="code-block" style="margin: 15px 0; font-size: 0.85rem;">${q.code}</div>` : '';
                 
                 return `
                     <div class="review-item ${statusClass}">
                         <span class="review-status ${statusClass}">${statusText}</span>
-                        <div style="font-weight: 600; margin-bottom: 8px;">Q${idx + 1}: ${q.q}</div>
-                        <div style="color: var(--gray); font-size: 0.9rem;">
-                            Your answer: ${userAnswer !== -1 ? q.options[userAnswer] : 'Not answered'}<br>
-                            Correct answer: ${q.options[q.a]}
+                        <div style="font-weight: 600; margin-bottom: 8px;">
+                            Q${idx + 1}${q.subjective ? ' <span class="subjective-badge">CODING</span>' : ''}: ${q.q}
+                        </div>
+                        ${codeBlockHtml}
+                        <div class="review-answer-comparison">
+                            <div class="answer-box">
+                                <div class="answer-label">Your Answer</div>
+                                <div class="answer-value ${isCorrect ? 'correct-ans' : 'wrong-ans'}">${userAnswerText}</div>
+                            </div>
+                            <div class="answer-box">
+                                <div class="answer-label">Correct Answer</div>
+                                <div class="answer-value correct-ans">${correctAnswerText}</div>
+                            </div>
                         </div>
                     </div>
                 `;
@@ -1003,14 +1290,35 @@
         document.addEventListener('keydown', (e) => {
             if (document.getElementById('quizScreen').classList.contains('hidden')) return;
             
-            if (e.key === 'ArrowRight') nextQuestion();
-            if (e.key === 'ArrowLeft') previousQuestion();
-            if (e.key >= '1' && e.key <= '4') {
-                const optIndex = parseInt(e.key) - 1;
-                if (optIndex < currentQuestions[currentQuestionIndex].options.length) {
-                    selectOption(optIndex);
+            const currentQ = currentQuestions[currentQuestionIndex];
+            
+            // Enter key for subjective questions
+            if (e.key === 'Enter' && currentQ.subjective) {
+                e.preventDefault();
+                if (currentQuestionIndex === currentQuestions.length - 1) {
+                    submitQuiz();
+                } else {
+                    nextQuestion();
+                }
+                return;
+            }
+            
+            // Arrow keys for navigation (only for MCQ)
+            if (!currentQ.subjective) {
+                if (e.key === 'ArrowRight') nextQuestion();
+                if (e.key === 'ArrowLeft') previousQuestion();
+                if (e.key >= '1' && e.key <= '4') {
+                    const optIndex = parseInt(e.key) - 1;
+                    if (optIndex < currentQ.options.length) {
+                        selectOption(optIndex);
+                    }
                 }
             }
+        });
+
+        // Auto-save subjective input on input event
+        document.getElementById('subjectiveInput').addEventListener('input', function() {
+            userAnswers[currentQuestionIndex] = this.value.trim() !== '' ? this.value : -1;
         });
     </script>
 </body>
